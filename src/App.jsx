@@ -18,8 +18,8 @@ function App() {
     localStorage.setItem("students", JSON.stringify(students));
   }, [students]);
 
-  const addStudent = (name) => {
-    const newStudent = { id: Date.now(), name, isPresent: true };
+  const addStudent = (name, phoneNumber) => {
+    const newStudent = { id: Date.now(), name, phoneNumber, isPresent: true };
     setStudents([...students, newStudent]);
     setPresentCount(presentCount + 1);
   };
@@ -44,16 +44,18 @@ function App() {
     );
   };
 
-  const editStudent = (id, newName) => {
+  const editStudent = (id, newName, newPhoneNumber) => {
     const updatedStudents = students.map((student) =>
-      student.id === id ? { ...student, name: newName } : student
+      student.id === id
+        ? { ...student, name: newName, phoneNumber: newPhoneNumber }
+        : student
     );
     setStudents(updatedStudents);
   };
 
   return (
-    <div className="min-h-screen px-4 py-8 bg-gray-100">
-      <div className="max-w-4xl p-6 mx-auto bg-white rounded-lg shadow-lg">
+    <div className="min-h-screen px-4 py-8 bg-gray-100 ">
+      <div className="max-w-4xl p-6 mx-auto bg-white border-4 border-green-400 rounded-lg shadow-lg">
         <h1 className="mb-6 text-4xl font-bold text-center md:text-6xl text-lime-500">
           Student Counter
         </h1>
