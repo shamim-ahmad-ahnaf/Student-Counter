@@ -56,7 +56,7 @@ function App() {
   return (
     <div className="min-h-screen px-4 py-8 bg-gray-100 ">
       <div className="max-w-4xl p-6 mx-auto bg-white border-4 border-green-400 rounded-lg shadow-lg">
-        <h1 className="mb-6 text-4xl font-bold text-center md:text-6xl text-lime-500">
+        <h1 className="mb-6 text-5xl font-bold text-center md:text-6xl text-lime-500">
           Student Counter
         </h1>
         <div className="grid grid-cols-1 gap-4 mb-6 sm:grid-cols-3">

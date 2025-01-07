@@ -7,14 +7,14 @@ function StudentList({ students, addStudent, toggleAttendance, deleteStudent, ed
   const [editingId, setEditingId] = useState(null);
   const [editingName, setEditingName] = useState("");
   const [editingPhoneNumber, setEditingPhoneNumber] = useState("");
-  const [showModal, setShowModal] = useState(false);  
-  const [studentToDelete, setStudentToDelete] = useState(null);  
+  const [showModal, setShowModal] = useState(false);
+  const [studentToDelete, setStudentToDelete] = useState(null);
 
   const handleAddStudent = () => {
-    if (newStudentName.trim() !== "" && newPhoneNumber.trim() !== "") {
+    if (newStudentName.trim() && newPhoneNumber.trim()) {
       addStudent(newStudentName, newPhoneNumber);
       setNewStudentName("");
-      setNewPhoneNumber("");  
+      setNewPhoneNumber("");
     }
   };
 
@@ -25,111 +25,125 @@ function StudentList({ students, addStudent, toggleAttendance, deleteStudent, ed
   };
 
   const handleSaveEdit = () => {
-    if (editingName.trim() !== "" && editingPhoneNumber.trim() !== "") {
+    if (editingName.trim() && editingPhoneNumber.trim()) {
       editStudent(editingId, editingName, editingPhoneNumber);
       setEditingId(null);
       setEditingName("");
-      setEditingPhoneNumber("");  
+      setEditingPhoneNumber("");
     }
   };
 
   const handleDeleteStudent = (id) => {
-    setStudentToDelete(id);  
-    setShowModal(true);  
+    setStudentToDelete(id);
+    setShowModal(true);
   };
 
   const confirmDelete = () => {
-    deleteStudent(studentToDelete);  
-    setShowModal(false);  
+    deleteStudent(studentToDelete);
+    setShowModal(false);
   };
 
   const cancelDelete = () => {
-    setShowModal(false);  
+    setShowModal(false);
   };
 
   return (
-    <div className="">
-     
-      <div className="flex flex-col items-center justify-center gap-4 mb-6 md:flex-row">
+    <div className="p-6 bg-gray-100">
+      {/* Add Student Form */}
+      <div className="flex flex-col items-center justify-center gap-4 mb-8 md:flex-row">
         <input
           type="text"
           value={newStudentName}
           onChange={(e) => setNewStudentName(e.target.value)}
           placeholder="Enter student name"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg md:w-3/4 focus:outline-none focus:ring-2 focus:ring-lime-400"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg md:w-1/3 focus:ring-2 focus:ring-green-400 focus:outline-none"
         />
         <input
           type="text"
           value={newPhoneNumber}
           onChange={(e) => setNewPhoneNumber(e.target.value)}
           placeholder="Enter phone number"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg md:w-3/4 focus:outline-none focus:ring-2 focus:ring-lime-400"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg md:w-1/3 focus:ring-2 focus:ring-green-400 focus:outline-none"
         />
         <button
           onClick={handleAddStudent}
-          className="w-full px-6 py-2 font-bold text-white bg-green-500 rounded-lg shadow md:w-auto hover:bg-lime-500"
+          className="px-6 py-2 font-bold text-white bg-green-500 rounded-lg hover:bg-green-600"
         >
           Add Student
         </button>
       </div>
 
       {/* Student List */}
-      <ul className="divide-y divide-gray-200">
+      <ul className="divide-y divide-border-gray-300">
         {students.map((student, index) => (
           <li
             key={student.id}
-            className="flex flex-col items-center justify-between p-4 mb-4 rounded-lg shadow md:flex-row bg-gray-50"
+            className={`flex flex-col p-4 mb-4 rounded-lg shadow-lg md:flex-row border-2 border-green-300 ${
+              !student.isPresent ? "bg-red-100" : "bg-white"
+            } transition-all duration-300 ease-in-out transform ${
+              !student.isPresent ? "scale-90" : "scale-100"
+            }`}
           >
             {editingId === student.id ? (
-              <div className="flex flex-col items-center w-full md:flex-row">
-                <div className="flex items-center flex-grow">
-                  <input
-                    type="text"
-                    value={editingName}
-                    onChange={(e) => setEditingName(e.target.value)}
-                    className="w-full px-4 py-2 mr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400"
-                  />
-                  <input
-                    type="text"
-                    value={editingPhoneNumber}
-                    onChange={(e) => setEditingPhoneNumber(e.target.value)}
-                    className="w-full px-4 py-2 mr-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400"
-                  />
-                </div>
+              <div className="flex flex-col w-full gap-4 md:flex-row animate-glow">
+                <input
+                  type="text"
+                  value={editingName}
+                  onChange={(e) => setEditingName(e.target.value)}
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:outline-none"
+                />
+                <input
+                  type="text"
+                  value={editingPhoneNumber}
+                  onChange={(e) => setEditingPhoneNumber(e.target.value)}
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-400 focus:outline-none"
+                />
                 <button
                   onClick={handleSaveEdit}
-                  className="w-full px-3 py-1 mt-2 text-white bg-green-500 rounded-lg shadow md:w-auto md:mt-0 hover:bg-blue-600"
+                  className="px-4 py-2 font-bold text-white bg-green-500 rounded-lg hover:bg-green-600"
                 >
                   Save
                 </button>
               </div>
             ) : (
-              <div className="flex items-center justify-between w-full">
-                <div className="flex flex-col items-center mb-4 md:mb-0">
-                  <div className="flex items-center mb-2">
-                    <span className="mr-2 text-lg font-bold text-gray-800">{index + 1}.</span>
-                    <span className="text-lg text-gray-800">{student.name}</span>
-                  </div>
+              <div className="flex flex-col justify-between w-full md:flex-row">
+                <div>
+                  <h3
+                    className={`text-lg font-bold ${
+                      !student.isPresent ? "text-red-600 line-through" : "text-gray-800"
+                    }`}
+                  >
+                    {index + 1}. {student.name}
+                  </h3>
                   <a
                     href={`tel:${student.phoneNumber}`}
-                    className="flex items-center space-x-2 text-blue-500 hover:text-blue-700"
+                    className="flex items-center text-blue-500 hover:underline"
                   >
-                    <FaPhone className="w-5 h-5" /> 
-                    <span>{student.phoneNumber}</span>
+                    <FaPhone className="mr-2" /> {student.phoneNumber}
                   </a>
                 </div>
-                <div className="flex items-center mt-4 space-x-3 md:mt-0">
+                <div className="flex gap-3 mt-4 md:mt-0">
                   <button
                     onClick={() => handleEditStudent(student.id, student.name, student.phoneNumber)}
-                    className="px-3 py-1 text-white bg-green-600 rounded-lg shadow hover:bg-lime-400"
+                    className="px-4 py-2 text-white bg-green-600 rounded-lg hover:bg-green-500"
                   >
                     Edit
                   </button>
                   <button
                     onClick={() => handleDeleteStudent(student.id)}
-                    className="px-3 py-1 text-white bg-red-500 rounded-lg shadow hover:bg-red-600"
+                    className="px-4 py-2 text-white bg-red-500 rounded-lg hover:bg-red-400"
                   >
                     Delete
+                  </button>
+                  <button
+                    onClick={() => toggleAttendance(student.id)}
+                    className={`px-4 py-2 text-white rounded-lg ${
+                      student.isPresent
+                        ? "bg-purple-500 hover:bg-purple-400"
+                        : "bg-red-600 hover:bg-red-500"
+                    }`}
+                  >
+                    {student.isPresent ? "Mark Absent" : "Mark Present"}
                   </button>
                 </div>
               </div>
@@ -140,19 +154,24 @@ function StudentList({ students, addStudent, toggleAttendance, deleteStudent, ed
 
       {/* Confirmation Modal */}
       {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="w-11/12 p-6 transition-all duration-300 ease-in-out transform bg-white border-4 border-green-500 rounded-lg shadow-lg sm:w-96">
-            <h3 className="mb-6 text-2xl font-semibold text-center text-gray-800 ">Are you sure you want to delete this student?</h3>
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 animate-fadeIn">
+          <div className="p-6 bg-white border-2 border-green-500 rounded-lg shadow-lg animate-slideUp">
+            <h3 className="mb-4 text-xl font-bold text-center text-gray-800">
+              Confirm Deletion
+            </h3>
+            <p className="mb-6 text-center text-gray-600">
+              Are you sure you want to delete this student?
+            </p>
             <div className="flex justify-center gap-6">
               <button
                 onClick={confirmDelete}
-                className="px-6 py-2 text-white transition-all duration-200 ease-in-out transform bg-green-600 rounded-lg hover:bg-green-700"
+                className="px-6 py-2 text-white bg-green-500 rounded-lg hover:bg-green-600"
               >
                 Yes
               </button>
               <button
                 onClick={cancelDelete}
-                className="px-6 py-2 text-white transition-all duration-200 ease-in-out transform bg-red-500 rounded-lg hover:bg-red-600"
+                className="px-6 py-2 text-white bg-red-500 rounded-lg hover:bg-red-600"
               >
                 No
               </button>
